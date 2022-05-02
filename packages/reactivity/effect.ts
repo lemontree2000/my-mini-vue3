@@ -9,11 +9,11 @@ class ReactivityEffect {
     }
     run() {
         activeEffect = this
-        this._fn()
+        return this._fn()
     }
 }
 
-// { target: {key: activeEffect } }
+// { target: {key: [activeEffect] } }
 const targetMap = new Map();
 
 export function track(target, key) {
@@ -29,7 +29,7 @@ export function track(target, key) {
         deps = new Set();
         depsMap.set(key, deps)
     }
-
+    // 每次get都会执行track Set 可以去重所以放心add
     deps.add(activeEffect)
 }
 
@@ -43,4 +43,5 @@ let activeEffect;
 export function effect(fn) {
     const _effect = new ReactivityEffect(fn);
     _effect.run();
+    return _effect.run.bind(_effect);
 }
