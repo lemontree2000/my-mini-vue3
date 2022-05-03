@@ -10,4 +10,22 @@ describe('reactivity', () => {
         expect(isReactive(observable)).toBe(true)
         expect(isReactive(original)).toBe(false)
     })
+
+    it('nested reactive', () => {
+        const original = {
+            nested: {
+                foo: 1
+            },
+            array: [
+                { bar: 2 }
+            ]
+        }
+
+        const observable = reactivity(original)
+
+        expect(isReactive(observable)).toBe(true)
+        expect(isReactive(observable.nested)).toBe(true)
+        expect(isReactive(observable.array)).toBe(true)
+        expect(isReactive(observable.array[0])).toBe(true)
+    })
 })
