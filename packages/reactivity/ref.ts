@@ -5,6 +5,7 @@ import { reactivity } from "./reactivity";
 class RefImpl {
     private _innerValue: any;
     private _rawValue: any;
+    public __isRef__: boolean = true;
     public dep;
     constructor(value) {
         this._innerValue = convertValue(value);
@@ -35,4 +36,28 @@ function convertValue(val: any) {
 
 export function ref(value) {
     return new RefImpl(value);
+}
+
+
+export function isRef(ref) {
+    return !!ref.__isRef__
+}
+
+export function unRef(ref) {
+    return isRef(ref) ? ref.value : ref;
+}
+
+export function proxyRefs(raw) {
+    return new Proxy(raw, {
+        get(target, key) {
+            return unRef(Reflect.get(target, key))
+        },
+        set(target, key, value) {
+            if (isRef(target[key]) && !isRef(value)) {
+                return target[key].value = value;
+            } else {
+                return Reflect.set(target, key, value);
+            }
+        }
+    })
 }
