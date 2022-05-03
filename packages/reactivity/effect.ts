@@ -1,7 +1,7 @@
 import { extend } from "../shared";
 
-
-
+let activeEffect;
+let shouldTrack;
 class ReactivityEffect {
     private _fn: Function;
     public scheduler: Function | undefined;
@@ -13,9 +13,18 @@ class ReactivityEffect {
         this.scheduler = scheduler;
     }
     run() {
+        // 如果stop了则不需要收集依赖了
+        if (!this.active) {
+            return this._fn()
+        }
         activeEffect = this
-        this.active = true;
-        return this._fn()
+
+        // shouldTrack 控制只有 _fn 里面使用obj.value 才会触发get 搜集依赖
+        shouldTrack = true;
+        const result = this._fn()
+        shouldTrack = false;
+
+        return result
     }
 
     stop() {
@@ -40,6 +49,8 @@ function cleanupEffect(effect) {
 const targetMap = new Map();
 
 export function track(target, key) {
+    if (!isTracking()) return;
+
     let depsMap = targetMap.get(target)
 
     if (!depsMap) {
@@ -52,9 +63,9 @@ export function track(target, key) {
         dep = new Set();
         depsMap.set(key, dep)
     }
-    if (!activeEffect) return;
 
-    // 每次get都会执行track Set 可以去重所以放心add
+    if (dep.has(activeEffect)) return;
+    
     dep.add(activeEffect)
 
     activeEffect.deps.push(dep)
@@ -76,7 +87,6 @@ export function stop(runner) {
     runner.effect.stop();
 }
 
-let activeEffect;
 export function effect(fn, options: any = {}) {
     const _effect = new ReactivityEffect(fn, options.scheduler);
 
@@ -89,4 +99,10 @@ export function effect(fn, options: any = {}) {
     runner.effect = _effect;
 
     return runner;
+}
+
+export function isTracking() {
+    // 没有使用effect 则没有activeEffect
+    // 触发track 但是不一定要收集, shouldTrack 控制是否搜集
+    return shouldTrack && activeEffect !== undefined
 }
