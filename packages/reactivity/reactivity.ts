@@ -13,7 +13,7 @@ export function readonly(raw) {
     return createReactivityObject(raw, readonlyHandlers)
 }
 
-export function isReactivity(obj) {
+export function isReactive(obj) {
     return !!obj[ReactiveFlags.IS_REACTIVE]
 }
 
