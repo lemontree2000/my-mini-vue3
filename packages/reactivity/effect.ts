@@ -2,7 +2,7 @@ import { extend } from "../shared";
 
 let activeEffect;
 let shouldTrack;
-class ReactivityEffect {
+export class ReactiveEffect {
     private _fn: Function;
     public scheduler: Function | undefined;
     deps = [];
@@ -96,7 +96,7 @@ export function stop(runner) {
 }
 
 export function effect(fn, options: any = {}) {
-    const _effect = new ReactivityEffect(fn, options.scheduler);
+    const _effect = new ReactiveEffect(fn, options.scheduler);
 
     _effect.run();
 
