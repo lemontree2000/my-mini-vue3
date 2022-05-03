@@ -1,4 +1,4 @@
-import { isReadonly, readonly } from "../reactivity";
+import { isProxy, isReadonly, readonly } from "../reactivity";
 
 describe('readonly', () => {
     it('should make nested values readonly', () => {
@@ -17,6 +17,8 @@ describe('readonly', () => {
         expect(isReadonly(wrapper.bar)).toBe(true)
         expect(isReadonly(wrapper.array)).toBe(true)
         expect(isReadonly(wrapper.array[0])).toBe(true)
+
+        expect(isProxy(wrapper)).toBe(true)
 
         expect(isReadonly(original)).toBe(false)
     })

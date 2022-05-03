@@ -1,10 +1,11 @@
-import { isReadonly, shallowReadonly } from "../reactivity"
+import { isProxy, isReadonly, shallowReadonly } from "../reactivity"
 
 describe('shallowReadonly', () => {
     it('should not make nono-reactive properties reactive', () => {
         const props = shallowReadonly({ n: { foo: 1 } })
 
         expect(isReadonly(props)).toBe(true)
+        expect(isProxy(props)).toBe(true)
         expect(isReadonly(props.n)).toBe(false)
     })
 
