@@ -49,7 +49,13 @@ function mountElement(vnode: any, container: any) {
         if (Array.isArray(val) && key === 'class') {
             val = val.join(' ')
         }
-        el.setAttribute(key, val)
+        const isOn = (key) => /^on[A-Z]/g.test(key)
+        if (isOn(key)) {
+            const eventName = key.slice(2).toLowerCase();
+            el.addEventListener(eventName, val)
+        } else {
+            el.setAttribute(key, val)
+        }
     }
     const { shapeFlag } = vnode;
     if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
@@ -66,4 +72,5 @@ function mountChildren(vnode: any, container: any) {
         patch(v, container)
     })
 }
+
 

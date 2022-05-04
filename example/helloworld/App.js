@@ -6,7 +6,15 @@ export const App = {
             { id: 'test', class: ['red'] },
             [
                 h('p', { class: ['red', 'green'], }, 'Hi'),
-                h('p', { class: 'red', }, this.msg),
+                h('p', {
+                    class: 'red',
+                    onClick: () => {
+                        console.log('onClick')
+                    },
+                    onMousedown() {
+                        console.log('onMousedown')
+                    }
+                }, this.msg),
             ]
         )
 
