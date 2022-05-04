@@ -24,28 +24,34 @@ function processComponent(vnode: any, container: any) {
 function mountComponent(vnode: any, container) {
     const instance = createComponentInstance(vnode);
     setupComponent(instance);
-    setupRenderEffect(instance, container)
+    setupRenderEffect(instance, vnode, container)
 }
 
-function setupRenderEffect(instance: any, container) {
-    const subTree = instance.render();
+function setupRenderEffect(instance: any, vnode, container) {
+    const { proxy } = instance;
+    const subTree = instance.render.call(proxy);
     patch(subTree, container)
+    vnode.el = subTree.el;
 }
 
 function processElement(vnode: any, container: any) {
-    const el = document.createElement(vnode.type)
+    mountElement(vnode, container)
+}
 
-    const props = vnode.props;
+function mountElement(vnode: any, container: any) {
+    const el = vnode.el = document.createElement(vnode.type)
+
+    const props = vnode.props
 
     for (const key in props) {
-        let val = props[key];
+        let val = props[key]
         if (Array.isArray(val) && key === 'class') {
             val = val.join(' ')
         }
         el.setAttribute(key, val)
     }
     if (typeof vnode.children === 'string') {
-        el.textContent = vnode.children;
+        el.textContent = vnode.children
     } else if (Array.isArray(vnode.children)) {
         mountChildren(vnode, el)
     }
