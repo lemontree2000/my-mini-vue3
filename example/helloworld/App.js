@@ -1,8 +1,6 @@
 import { h } from '../../lib/my-mini-vue.esm.js'
-window.componentV = null
 export const App = {
     render() {
-        window.componentV = this;
         return h(
             "div",
             { id: 'test', class: ['red'] },

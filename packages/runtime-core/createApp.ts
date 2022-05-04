@@ -5,10 +5,7 @@ export function createApp(rootComponent) {
     return {
         mount(rootContainer) {
             const vnode = createVNode(rootComponent);
-
             render(vnode, rootContainer);
-            // const htmlElement = patch(vnode)
-            // rootContainer.appendChild(htmlElement);
         }
     }
 }
