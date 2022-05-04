@@ -1,4 +1,5 @@
 import { h } from '../../lib/my-mini-vue.esm.js'
+import { Foo } from './Foo.js'
 export const App = {
     render() {
         return h(
@@ -6,15 +7,16 @@ export const App = {
             { id: 'test', class: ['red'] },
             [
                 h('p', { class: ['red', 'green'], }, 'Hi'),
-                h('p', {
-                    class: 'red',
-                    onClick: () => {
-                        console.log('onClick')
-                    },
-                    onMousedown() {
-                        console.log('onMousedown')
-                    }
-                }, this.msg),
+                h(Foo, { title: 'names are' })
+                // h('p', {
+                //     class: 'red',
+                //     onClick: () => {
+                //         console.log('onClick')
+                //     },
+                //     onMousedown() {
+                //         console.log('onMousedown')
+                //     }
+                // }, this.msg),
             ]
         )
 

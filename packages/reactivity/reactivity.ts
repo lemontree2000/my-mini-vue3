@@ -1,3 +1,4 @@
+import { isObject } from "../shared/index";
 import { mutableHandlers, readonlyHandlers, shallowReadonlyHandlers } from "./baseHandlers";
 
 export enum ReactiveFlags {
@@ -30,5 +31,9 @@ export function shallowReadonly(raw) {
 }
 
 function createReactivityObject(raw: any, baseHandlers) {
+    if (!isObject(raw)) {
+        console.warn(`raw: ${raw} is not an object`, raw)
+        return
+    }
     return new Proxy(raw, baseHandlers);
 }
