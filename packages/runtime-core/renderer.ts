@@ -1,3 +1,4 @@
+import { isObject } from "../shared/index"
 import { createComponentInstance, setupComponent } from "./component"
 
 
@@ -7,7 +8,13 @@ export function render(vnode, container) {
 }
 
 function patch(vnode: any, container: any) {
-    processComponent(vnode, container)
+    // TODO: 判断是否是element 还是 component
+    console.log(vnode.type)
+    if (typeof vnode.type === 'string') {
+        processElement(vnode, container)
+    } else if (isObject(vnode.type)) {
+        processComponent(vnode, container)
+    }
 }
 
 function processComponent(vnode: any, container: any) {
@@ -23,5 +30,32 @@ function mountComponent(vnode: any, container) {
 function setupRenderEffect(instance: any, container) {
     const subTree = instance.render();
     patch(subTree, container)
+}
+
+function processElement(vnode: any, container: any) {
+    const el = document.createElement(vnode.type)
+
+    const props = vnode.props;
+
+    for (const key in props) {
+        let val = props[key];
+        if (Array.isArray(val) && key === 'class') {
+            val = val.join(' ')
+        }
+        el.setAttribute(key, val)
+    }
+    if (typeof vnode.children === 'string') {
+        el.textContent = vnode.children;
+    } else if (Array.isArray(vnode.children)) {
+        mountChildren(vnode, el)
+    }
+
+    container.appendChild(el)
+}
+
+function mountChildren(vnode: any, container: any) {
+    vnode.children.forEach((v) => {
+        patch(v, container)
+    })
 }
 
