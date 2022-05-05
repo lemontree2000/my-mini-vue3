@@ -4,7 +4,13 @@ export const App = {
     name: "app",
     render() {
         const app = h('div', {}, 'app')
-        const foo = h(Foo)
+        // 
+        // const foo = h(Foo, {}, h('div', {}, 'hh`'))
+        // const foo = h(Foo, {}, [h('div', {}, 'slot1'), h('p', {}, 'slot2')])
+        const foo = h(Foo, {}, {
+            header: (props) => h('div', {}, 'slot1' + props.age),
+            footer: (props) => h('p', {}, 'slot2' + props.age)
+        })
         return h("div", {}, [app, foo])
 
     },
