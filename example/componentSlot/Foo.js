@@ -8,7 +8,8 @@ export const Foo = {
         return h('div', {}, [
             renderSlots(this.$slots, 'header', { age }),
             foo,
-            renderSlots(this.$slots, 'footer', { age })
+            renderSlots(this.$slots, 'footer', { age }),
+            renderSlots(this.$slots, 'other', { age })
         ])
         // return h('div', {}, [foo, renderSlots(this.$slots)])
     },
