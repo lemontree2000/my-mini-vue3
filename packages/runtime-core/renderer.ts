@@ -1,6 +1,7 @@
 import { isObject } from "../shared/index"
 import { ShapeFlags } from "../shared/ShapeFlags"
 import { createComponentInstance, setupComponent } from "./component"
+import { Fragment } from "./vnode"
 
 
 export function render(vnode, container) {
@@ -10,11 +11,18 @@ export function render(vnode, container) {
 
 function patch(vnode: any, container: any) {
     //  判断是否是element 还是 component
-    const { shapeFlag } = vnode
-    if (shapeFlag & ShapeFlags.ELEMENT) {
-        processElement(vnode, container)
-    } else if (shapeFlag & ShapeFlags.STATEFULL_COMPONENT) {
-        processComponent(vnode, container)
+    const { shapeFlag, type } = vnode
+    switch (type) {
+        case Fragment:
+            processFragment(vnode, container)
+            break;
+        default:
+            if (shapeFlag & ShapeFlags.ELEMENT) {
+                processElement(vnode, container)
+            } else if (shapeFlag & ShapeFlags.STATEFULL_COMPONENT) {
+                processComponent(vnode, container)
+            }
+            break;
     }
 }
 
@@ -73,4 +81,8 @@ function mountChildren(vnode: any, container: any) {
     })
 }
 
+
+function processFragment(vnode: any, container: any) {
+    mountChildren(vnode, container)
+}
 
