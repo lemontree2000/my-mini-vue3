@@ -14,7 +14,6 @@ export const publicComponentHandlers = {
             return props[key];
         }
         const getter = publicPropertiesMap[key]
-        debugger
         if (getter) {
             return getter(instance);
         }
