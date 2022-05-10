@@ -1,4 +1,5 @@
 import { effect } from "../reactivity"
+import { EMPTY_OBJ } from "../shared"
 import { ShapeFlags } from "../shared/ShapeFlags"
 import { createComponentInstance, setupComponent } from "./component"
 import { createAppApi } from "./createApp"
@@ -52,10 +53,31 @@ export function createRenderer(options) {
     }
 
     function patchElement(n1: any, n2, container) {
-        console.log('patchElement')
-        console.log('n1', n1)
-        console.log('n2', n2)
+        const newProps = n1.props || EMPTY_OBJ;
+        const oldProps = n2.props || EMPTY_OBJ;
+        const el = n1.el = n2.el
+        patchProps(el, oldProps, newProps)
     }
+
+    function patchProps(el, oldProps, newProps) {
+        if (oldProps !== newProps) {
+            for (const key in newProps) {
+                const prevProp = oldProps[key]
+                const nextProp = newProps[key]
+                if (prevProp !== nextProp) {
+                    hostPatchProp(el, key, prevProp, nextProp)
+                }
+            }
+            if (oldProps !== EMPTY_OBJ) {
+                for (const key in oldProps) {
+                    if (!(key in newProps)) {
+                        hostPatchProp(el, key, oldProps[key], null)
+                    }
+                }
+            }
+        }
+    }
+
 
     function mountElement(vnode: any, container: any, currentComponent) {
         const el = vnode.el = hostCreateElement(vnode.type)
@@ -63,7 +85,7 @@ export function createRenderer(options) {
 
         for (const key in props) {
             let val = props[key]
-            hostPatchProp(el, key, val)
+            hostPatchProp(el, key, null, val)
 
         }
         const { shapeFlag } = vnode;

@@ -8,7 +8,7 @@ export const App = {
                 h('div', {}, `Hi count:${this.count}`),
                 h('button', { onClick: this.onChangePropsDemo1 }, `onChangePropsDemo1-值改变了-修改`),
                 h('button', { onClick: this.onChangePropsDemo2 }, `onChangePropsDemo1-值变成了undefined-删除`),
-                h('button', { onClick: this.onChangePropsDemo3 }, `onChangePropsDemo1-key在新的黎明没有-删除`),
+                h('button', { onClick: this.onChangePropsDemo3 }, `onChangePropsDemo1-key在新的里面没有-删除`),
             ]
         )
 

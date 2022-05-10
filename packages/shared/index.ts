@@ -12,6 +12,7 @@ export const hasOwn = (val: any, key: any) => {
     return Object.prototype.hasOwnProperty.call(val, key)
 }
 
+export const EMPTY_OBJ = {}
 
 export const camelize = (str: string) => {
     return str.replace(/-(\w)/g, (_, c: string) => {
