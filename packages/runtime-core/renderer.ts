@@ -70,23 +70,73 @@ export function createRenderer(options) {
 
         const { shapeFlag } = n2
         const prevShapeFlag = n1.shapeFlag
+        const c1 = n1.children;
+        const c2 = n2.children; // 新
 
         // 新的是文本
         if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
             // 旧的事数组
             if (prevShapeFlag & ShapeFlags.ARRAY_CHILDREN) {
                 // 1. 把老的children 清空
-                unmountChildren(n1.children);
+                unmountChildren(c1);
             }
-            if (n2.children !== n1.children) {
-                hostSetElementText(container, n2.children)
+            if (c1 !== c2) {
+                hostSetElementText(container, c2)
             }
         } else {
             if (prevShapeFlag & ShapeFlags.TEXT_CHILDREN) {
                 hostSetElementText(container, '')
-                mountChildren(n2.children, container, parentComponent)
+                mountChildren(c2, container, parentComponent)
+            } else {
+                // array diff  array
+                patchKeyedChildren(c1, c2, container, parentComponent)
             }
         }
+    }
+
+    function isSomeVNodeType(n1, n2) {
+        return n1.type === n2.type && n1.key === n2.key
+    }
+    function patchKeyedChildren(c1, c2, container, parentComponent) {
+        let i = 0;
+        let e1 = c1.length - 1;
+        let e2 = c2.length - 1;
+        // 左侧对比 
+        while (i <= e1 && i <= e2) {
+            const n1 = c1[i];
+            const n2 = c2[i];
+            if (isSomeVNodeType(n1, n2)) {
+                patch(n1, n2, container, parentComponent)
+            } else {
+                break;
+            }
+            i++
+        }
+        // 此时的i 代表不同节点开始位置ab -> abd 这时候的i则为2
+       
+        // 右侧对比
+        while (i <= e1 && i <= e2) {
+            const n1 = c1[e1];
+            const n2 = c2[e2];
+
+            if (isSomeVNodeType(n1, n2)) {
+                patch(n1, n2, container, parentComponent)
+            } else {
+                break;
+            }
+            e1--;
+            e2--;
+        }
+
+        // 此时e1 和 e2 代表 右侧开始不同节点的位置 e1 = 1, e2 = 2;
+
+        // 3. 新的比老的多 创建
+        if (i > e1) {
+            if (i <= e2) {
+                patch(null, c2[i], container, parentComponent)
+            }
+        }
+        console.log(i)
     }
 
     function unmountChildren(children: any) {
