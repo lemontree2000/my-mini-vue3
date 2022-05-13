@@ -32,10 +32,21 @@ import { h, ref } from '../../lib/my-mini-vue.esm.js'
 // 3.新的比旧的长
 // ( a b ) 
 // (a b ) c
+// 左侧多
+// const nextChildren = [
+//     h('div', { key: 'A' }, 'A'),
+//     h('div', { key: 'B' }, 'B'),
+//     h('div', { key: 'C' }, 'C'),
+// ]
+// const prevChildren = [
+//     h('div', { key: 'A' }, 'A'),
+//     h('div', { key: 'B' }, 'B'),
+// ]
+// 右侧多
 const nextChildren = [
+    h('div', { key: 'C' }, 'C'),
     h('div', { key: 'A' }, 'A'),
     h('div', { key: 'B' }, 'B'),
-    h('div', { key: 'C' }, 'C'),
 ]
 const prevChildren = [
     h('div', { key: 'A' }, 'A'),
