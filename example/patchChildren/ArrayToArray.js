@@ -37,18 +37,32 @@ import { h, ref } from '../../lib/my-mini-vue.esm.js'
 //     h('div', { key: 'A' }, 'A'),
 //     h('div', { key: 'B' }, 'B'),
 //     h('div', { key: 'C' }, 'C'),
+//     h('div', { key: 'D' }, 'D'),
 // ]
 // const prevChildren = [
 //     h('div', { key: 'A' }, 'A'),
 //     h('div', { key: 'B' }, 'B'),
 // ]
 // 右侧多
-const nextChildren = [
-    h('div', { key: 'C' }, 'C'),
+// const nextChildren = [
+//     h('div', { key: 'D' }, 'D'),
+//     h('div', { key: 'C' }, 'C'),
+//     h('div', { key: 'A' }, 'A'),
+//     h('div', { key: 'B' }, 'B'),
+// ]
+// const prevChildren = [
+//     h('div', { key: 'A' }, 'A'),
+//     h('div', { key: 'B' }, 'B'),
+// ]
+
+
+const prevChildren = [
     h('div', { key: 'A' }, 'A'),
     h('div', { key: 'B' }, 'B'),
+    h('div', { key: 'C' }, 'C'),
+    h('div', { key: 'D' }, 'D'),
 ]
-const prevChildren = [
+const nextChildren = [
     h('div', { key: 'A' }, 'A'),
     h('div', { key: 'B' }, 'B'),
 ]
