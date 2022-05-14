@@ -56,15 +56,71 @@ import { h, ref } from '../../lib/my-mini-vue.esm.js'
 // ]
 
 
+// const prevChildren = [
+//     h('div', { key: 'A' }, 'A'),
+//     h('div', { key: 'B' }, 'B'),
+//     h('div', { key: 'C' }, 'C'),
+//     h('div', { key: 'D' }, 'D'),
+// ]
+// const nextChildren = [
+//     h('div', { key: 'A' }, 'A'),
+//     h('div', { key: 'B' }, 'B'),
+// ]
+
+// 5.对比中间的部分
+// 删除老的（在老的里面存在，但在新的里面不存在）
+// 5.1
+// a, b, (c, d), f, g
+// a, b, (e, c), f, g
+// d 节点在新的里面是没有的， 需要删除
+// c 节点props 也发生变化了
+
+
+// const prevChildren = [
+//     h('div', { key: 'A' }, 'A'),
+//     h('div', { key: 'B' }, 'B'),
+//     h('div', { key: 'C', id: "c-prev" }, 'C'),
+//     h('div', { key: 'D' }, 'D'),
+//     h('div', { key: 'F' }, 'F'),
+//     h('div', { key: 'G' }, 'G'),
+// ]
+
+// const nextChildren = [
+//     h('div', { key: 'A' }, 'A'),
+//     h('div', { key: 'B' }, 'B'),
+//     h('div', { key: 'E' }, 'E'),
+//     h('div', { key: 'C', id: "c-next" }, 'C'),
+//     h('div', { key: 'F' }, 'F'),
+//     h('div', { key: 'G' }, 'G'),
+// ]
+
+// 5.对比中间的部分
+// 删除老的（在老的里面存在，但在新的里面不存在）
+// 5.2
+// a, b, (c, d, e,n), f, g
+// a, b, (c, d), f, g
+// e,n 节点在新的里面是没有的， 旧节点大部分都是需删除（优化删除逻辑， 将比对的完要更新的节点后，其它都是不需要的）
+// c 节点props 也发生变化了
+
+
 const prevChildren = [
     h('div', { key: 'A' }, 'A'),
     h('div', { key: 'B' }, 'B'),
-    h('div', { key: 'C' }, 'C'),
+    h('div', { key: 'C', id: "c-prev" }, 'C'),
     h('div', { key: 'D' }, 'D'),
+    h('div', { key: 'E' }, 'E'),
+    h('div', { key: 'N' }, 'N'),
+    h('div', { key: 'F' }, 'F'),
+    h('div', { key: 'G' }, 'G'),
 ]
+
 const nextChildren = [
     h('div', { key: 'A' }, 'A'),
     h('div', { key: 'B' }, 'B'),
+    h('div', { key: 'D' }, 'D'),
+    h('div', { key: 'C', id: "c-next" }, 'C'),
+    h('div', { key: 'F' }, 'F'),
+    h('div', { key: 'G' }, 'G'),
 ]
 
 
