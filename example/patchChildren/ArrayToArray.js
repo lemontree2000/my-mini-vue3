@@ -147,26 +147,41 @@ import { h, ref } from '../../lib/my-mini-vue.esm.js'
 // a, b, (c,d,e,z),f,g
 // a, b, (d,c,y,z),f,g
 
+// const prevChildren = [
+//     h('div', { key: 'A' }, 'A'),
+//     h('div', { key: 'B' }, 'B'),
+//     h('div', { key: 'C' }, 'C'),
+//     h('div', { key: 'D' }, 'D'),
+//     h('div', { key: 'E' }, 'E'),
+//     h('div', { key: 'Z' }, 'Z'),
+//     h('div', { key: 'F' }, 'F'),
+//     h('div', { key: 'G' }, 'G'),
+// ]
+
+// const nextChildren = [
+//     h('div', { key: 'A' }, 'A'),
+//     h('div', { key: 'B' }, 'B'),
+//     h('div', { key: 'D' }, 'D'),
+//     h('div', { key: 'C' }, 'C'),
+//     h('div', { key: 'Y' }, 'Y'),
+//     h('div', { key: 'E' }, 'E'),
+//     h('div', { key: 'F' }, 'F'),
+//     h('div', { key: 'G' }, 'G'),
+// ]
+
+// fix c 节点移动不应该新建
 const prevChildren = [
     h('div', { key: 'A' }, 'A'),
+    h('div', {}, 'C'),
     h('div', { key: 'B' }, 'B'),
-    h('div', { key: 'C' }, 'C'),
     h('div', { key: 'D' }, 'D'),
-    h('div', { key: 'E' }, 'E'),
-    h('div', { key: 'Z' }, 'Z'),
-    h('div', { key: 'F' }, 'F'),
-    h('div', { key: 'G' }, 'G'),
 ]
 
 const nextChildren = [
     h('div', { key: 'A' }, 'A'),
     h('div', { key: 'B' }, 'B'),
+    h('div', {}, 'C'),
     h('div', { key: 'D' }, 'D'),
-    h('div', { key: 'C' }, 'C'),
-    h('div', { key: 'Y' }, 'Y'),
-    h('div', { key: 'E' }, 'E'),
-    h('div', { key: 'F' }, 'F'),
-    h('div', { key: 'G' }, 'G'),
 ]
 
 
