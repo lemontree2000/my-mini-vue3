@@ -3,6 +3,7 @@ import { EMPTY_OBJ } from "../shared"
 import { ShapeFlags } from "../shared/ShapeFlags"
 import { createComponentInstance, setupComponent } from "./component"
 import { createAppApi } from "./createApp"
+import { queueJobs } from "./scheduler"
 import { shouldUpdateComponent } from "./udpateComponentUtils"
 import { Fragment, Text } from "./vnode"
 
@@ -336,8 +337,16 @@ export function createRenderer(options) {
                 const nextSubTree = instance.subTree = instance.render.call(proxy);
                 patch(preSubtree, nextSubTree, container, instance, anchor)
             }
+        }, {
+            scheduler() {
+                console.log('scheduler')
+                queueJobs(instance.update)
+            }
         })
     }
+
+
+
     function updateComponentPreRender(instance, nextVNode) {
         instance.vnode = nextVNode;
         instance.next = null;

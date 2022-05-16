@@ -1,9 +1,9 @@
-import { h, ref } from '../../lib/my-mini-vue.esm.js'
+import { getCurrentInstance, h, nextTick, ref } from '../../lib/my-mini-vue.esm.js'
 export const App = {
     render() {
         console.log(this)
         const button = h("button", { onClick: this.update }, "update");
-        const p = h("p", {}, "count:"+ this.count)
+        const p = h("p", {}, "count:" + this.count)
         return h(
             "div",
             { id: 'test', class: ['red'] },
@@ -16,10 +16,18 @@ export const App = {
     },
     setup() {
         const count = ref(0)
-        const update = () => {
+        const instance = getCurrentInstance()
+        const update = async () => {
             for (let i = 0; i < 100; i++) {
                 count.value = i
             }
+
+            // nextTick(() => {
+            //     console.log(instance.vnode.el.innerHTML)
+            // })
+            await nextTick();
+            console.log(instance.vnode.el.innerHTML)
+
         }
         return {
             msg: 'my mini vu2e',
