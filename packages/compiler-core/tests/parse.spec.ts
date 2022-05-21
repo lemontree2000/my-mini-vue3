@@ -90,5 +90,11 @@ describe('Parse', () => {
                 ]
             })
         })
+
+        test("should throw error when lack en tag", () => {
+            expect(() => {
+                baseParse("<div><span></div>")
+            }).toThrow('缺失结束标签:span');
+        })
     })
 })

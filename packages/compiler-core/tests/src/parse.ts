@@ -7,13 +7,13 @@ enum TagType {
 
 export function baseParse(content: string) {
     const context = createParseContext(content)
-    return createRoot(parseChildren(context, ''))
+    return createRoot(parseChildren(context, []))
 }
 
 
-function parseChildren(context, parentTag) {
+function parseChildren(context, ancestors) {
     const nodes: any[] = []
-    while (!isEnd(context, parentTag)) {
+    while (!isEnd(context, ancestors)) {
         let node;
         const s = context.source;
         if (s.startsWith("{{")) {
@@ -21,7 +21,7 @@ function parseChildren(context, parentTag) {
         } else if (s[0] === '<') {
             if (/[a-z]/i.test(s[1])) {
                 console.log('parse Element')
-                node = parseElement(context)
+                node = parseElement(context, ancestors)
             }
         }
         if (!node) {
@@ -34,11 +34,15 @@ function parseChildren(context, parentTag) {
 
 }
 
-function isEnd(context, parentTag) {
+function isEnd(context, ancestors) {
     const s = context.source
-    console.log(parentTag, s)
-    if (parentTag && s.startsWith(`</${parentTag}>`)) {
-        return true
+    if (s.startsWith('</')) {
+        for (let i = ancestors.length - 1; i >= 0; i--) {
+            const tag = ancestors[i].tag;
+            if (startsWithEndTagOpen(s, tag)) {
+                return true
+            }
+        }
     }
 
     return !s
@@ -57,10 +61,6 @@ function parseText(context: any) {
         }
     }
 
-    // if (index !== -1) {
-    //     endIndex = index;
-    // }
-
     const content = parseTextData(context, endIndex)
 
     console.log('>>', context.source)
@@ -76,11 +76,21 @@ function parseTextData(context: any, length) {
     return content
 }
 
-function parseElement(context: any) {
+function parseElement(context: any, ancestors) {
     const element: any = parseTag(context, TagType.START);
-    element.children = parseChildren(context, element.tag)
-    parseTag(context, TagType.END)
+    ancestors.push(element)
+    element.children = parseChildren(context, ancestors)
+    ancestors.pop();
+    if (startsWithEndTagOpen(context.source, element.tag)) {
+        parseTag(context, TagType.END)
+    } else {
+        throw new Error(`缺失结束标签:${element.tag}`)
+    }
     return element
+}
+
+function startsWithEndTagOpen(source, tag) {
+    return source.startsWith("</") && source.slice(2, 2 + tag.length).toLowerCase() === tag.toLowerCase()
 }
 
 
