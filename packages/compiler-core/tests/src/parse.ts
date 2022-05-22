@@ -20,7 +20,6 @@ function parseChildren(context, ancestors) {
             node = parseInterpolation(context)
         } else if (s[0] === '<') {
             if (/[a-z]/i.test(s[1])) {
-                console.log('parse Element')
                 node = parseElement(context, ancestors)
             }
         }
@@ -63,7 +62,6 @@ function parseText(context: any) {
 
     const content = parseTextData(context, endIndex)
 
-    console.log('>>', context.source)
     return {
         type: NodeTypes.TEXT,
         content
@@ -139,7 +137,6 @@ function parseInterpolation(context) {
         context,
         closeDelimiter.length
     )
-    console.log(context)
 
     return {
         type: NodeTypes.INTERPOLATION,
