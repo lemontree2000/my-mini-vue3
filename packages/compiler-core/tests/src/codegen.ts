@@ -64,15 +64,12 @@ function genNode(node, context) {
 
 function genElement(node, context) {
     const { push, helper } = context;
-    const { tag, children } = node;
+    const { tag, children, props } = node;
 
-    push(`${helper(CREATE_ELEMENT_VNODE)}("${tag}", null, `)
+    push(`${helper(CREATE_ELEMENT_VNODE)}(`)
 
-    for (let i = 0; i < children.length; i++) {
-        const child = children[i];
-        genNode(child, context)
-    }
-
+    // genNode(children, context)
+    genNodeList(genNullable([tag, props, children,]), context)
     push(")")
 }
 
@@ -109,7 +106,6 @@ function getExpression(node, context: any) {
 }
 
 function genCompoundExpression(node, context: any) {
-
     const children = node.children;
     const { push } = context;
     for (let i = 0; i < children.length; i++) {
@@ -117,10 +113,27 @@ function genCompoundExpression(node, context: any) {
         if (isString(child)) {
             push(child);
         } else {
+            genNode(child, context);
+        }
+    }
+}
+
+function genNullable(args: any[]) {
+    return args.map((arg) => arg || "null")
+}
+function genNodeList(nodes: any[], context) {
+    const { push } = context;
+    for (let i = 0; i < nodes.length; i++) {
+        const node = nodes[i];
+        if (isString(node)) {
+            push(node);
+        } else {
             genNode(node, context);
         }
 
+        if (i < nodes.length - 1) {
+            push(', ')
+        }
     }
-
 }
 

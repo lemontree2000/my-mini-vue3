@@ -1,3 +1,4 @@
+import { CREATE_ELEMENT_VNODE } from "./runtimeHelpers";
 
 export enum NodeTypes {
     INTERPOLATION,
@@ -6,4 +7,14 @@ export enum NodeTypes {
     TEXT,
     ROOT,
     COMPOUND_EXPRESSION
+}
+
+export function createVnodeCall(tag, props, children, context) {
+    context.helper(CREATE_ELEMENT_VNODE);
+    return {
+        type: NodeTypes.ELEMENT,
+        tag,
+        props,
+        children
+    }
 }
