@@ -1,4 +1,4 @@
-import { isString } from "../../../shared";
+import { isString } from "../../shared";
 import { NodeTypes } from "./ast";
 import { CREATE_ELEMENT_VNODE, helperMapName, TO_DISPLAY_STRING } from "./runtimeHelpers";
 
@@ -32,6 +32,7 @@ function genFunctionPreamble(ast, context) {
     const aliasHelper = (s) => {
         return `${helperMapName[s]}: _${helperMapName[s]}`
     };
+
     if (ast.helpers.length > 0) {
         push(`const { ${ast.helpers.map(aliasHelper).join(', ')} } = ${VueBinging}`);
     }
@@ -66,7 +67,7 @@ function genElement(node, context) {
     const { push, helper } = context;
     const { tag, children, props } = node;
 
-    push(`${helper(CREATE_ELEMENT_VNODE)}(`)
+    push(`_${helper(CREATE_ELEMENT_VNODE)}(`)
 
     // genNode(children, context)
     genNodeList(genNullable([tag, props, children,]), context)
@@ -82,9 +83,7 @@ function createCodegenContent() {
     const context = {
         code: "",
         push(source) {
-            console.log('source>>', source)
             context.code += source
-            console.log('context------', context.code)
         },
         helper(key) {
             return helperMapName[key]

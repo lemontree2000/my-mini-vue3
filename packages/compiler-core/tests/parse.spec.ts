@@ -1,6 +1,6 @@
-import { NodeTypes } from "./src/ast"
-import { baseParse } from "./src/parse"
-import { transform } from "./src/transform"
+import { NodeTypes } from "../src/ast"
+import { baseParse } from "../src/parse"
+import { transform } from "../src/transform"
 
 describe('Parse', () => {
 
